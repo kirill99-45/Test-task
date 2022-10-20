@@ -1,4 +1,4 @@
-export interface IWays {
+interface IWays {
   id : string,
   text : string
 }
@@ -15,7 +15,7 @@ export interface IWay {
   activeWay : null | IWays,
 };
 
-export interface IDuration {
+interface IDuration {
   hours? : number,
   minutes : number,
 }

@@ -1,7 +1,10 @@
 .order {
+  margin-top: 100px;
   display: flex;
   margin-left: 100px;
   column-gap: 10px;
+  margin-bottom: 10px;
+  width: 800px;
 }
 
 .filters {

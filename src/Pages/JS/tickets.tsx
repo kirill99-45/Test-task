@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { IWays, ITimesState, IWay, IDuration, IResult } from './interface';
+import { ITimesState, IWay, IResult } from './interface';
 import './tickets.css';
 import { localTimes, getLocalHours, getZero } from './time';
 
 export const Tickets: React.FC = () => {
 
-  const [wayState, setWayState] = useState<IWay>({
+  const TRIP_DURATION = 50 // Время в пути
+
+  const [wayState, setWayState] = useState<IWay>({ // Состояние селектора выбора направлений
     isActive : false,
     ways : [{ id : '0', text : 'из А в В' }, { id : '1', text : 'из Б в А' }, { id : '2', text : 'из A в B и обратно в А' },],
     activeWay : null
@@ -15,15 +17,15 @@ export const Tickets: React.FC = () => {
     isActive : false,
     start : null,
     times : null,
-  })
+  }) // Состояние селектора выбора времени отправки
 
   const [endTimeState, setEndTimeState] = useState<ITimesState>({
     isActive : false,
     start : null,
     times : null,
-  })
+  }) // Состояние селектора выбора времени на обратный путь
 
-  const [result, setResult] = useState<IResult>({
+  const [result, setResult] = useState<IResult>({ // Состояние результата
     disabled : true,
     isActive : false,
     countOfTickets : 1,
@@ -35,8 +37,6 @@ export const Tickets: React.FC = () => {
     start : null,
     end : null,
   })
-
-  const TRIP_DURATION = 50 // Время в пути
 
   const getWay = (event: React.MouseEvent<HTMLElement>) => { // Выбираем направление
     const element: HTMLElement | any  = event.currentTarget;
@@ -102,12 +102,6 @@ export const Tickets: React.FC = () => {
     }
   }
 
-  const getString = (number) => {
-    const hours: number = Math.floor(number / 60)
-    const minutes: number = ((number) - (hours * 60))
-    return `${hours}:${minutes}`
-  }
-
   const getTimeToReturn = (event: React.MouseEvent<HTMLElement>) => { // Получаем обратный путь
     const element: HTMLElement = event.currentTarget
 
@@ -115,7 +109,7 @@ export const Tickets: React.FC = () => {
       return index === 0 ? +item * 60 : +item
     }).reduce((acc, item) => acc + item))
 
-    const start: number | any | string = result.start.number
+    const start: number | null  = result.start.number
 
     const hours: number = Math.floor((end - start + 100) / 60)
     const minutes: number = ((end - start + 100) - (hours * 60))
@@ -128,19 +122,20 @@ export const Tickets: React.FC = () => {
     })
   }
 
-
-  const getResult = (event: React.MouseEvent) => {
-    setResult({ ...result, isActive : !result.isActive})
-  }
-
-  const getCountOfTickets = (event:  React.ChangeEvent<HTMLInputElement>) => {
-    setResult({...result, countOfTickets : +(event.currentTarget.value)})
+  const getTitleHours = () => {
+    if ((result.duration.hours % 10) === 1) {
+      return 'час'
+    } else if ((result.duration.hours % 10) < 5) {
+      return 'часа'
+    } return 'часов'
   }
 
   return (
     <>
       <div className='order' style={{ flexDirection : 'column' }}>
-        <button type='button' onClick={getResult} disabled={result.disabled}>
+        <button type='button'
+          onClick={(event: React.MouseEvent) => setResult({ ...result, isActive : !result.isActive})}
+          disabled={result.disabled}>
           { result.isActive ? 'Скрыть' : 'Получить результат' }
         </button>
         {
@@ -148,8 +143,8 @@ export const Tickets: React.FC = () => {
           <span>
             Вы выбрали {result.countOfTickets} билета по маршруту из {wayState.activeWay?.text}
             стоимостью {result.price * result.countOfTickets}.
-            Это путешествие займет у вас {result.duration.hours ? `${result.duration.hours} часов` : ''} {result.duration?.minutes} минут
-            Теплоход отправляется в {result.start.string}, а прибудет в {result.end}.
+            Это путешествие займет у вас {result.duration.hours ? `${result.duration.hours} ${getTitleHours()}` : ''} {result.duration?.minutes} минут
+            Теплоход отправляется в {result.start?.string}, а прибудет в {result.end}.
           </span>
         }
       </div>
@@ -207,12 +202,13 @@ export const Tickets: React.FC = () => {
         </div>
         <div className='filter'>
           <label htmlFor='count-tickets'>Количество билетов</label>
-          <input type='number'
+          <input
+            type='number'
             className='filter__input'
             min='0'
             max='30'
             value={result.countOfTickets}
-            onChange={getCountOfTickets}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setResult({...result, countOfTickets : +(event.currentTarget.value)})}
             id='count-tickets'
           />
         </div>
