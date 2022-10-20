@@ -1,0 +1,28 @@
+.home {
+  height: 100vh;
+  width: 100vw;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 20px;
+  font-size: 24px;
+}
+
+.home__link {
+  display: flex;
+  padding: 10px 20px;
+  background: rgba(254, 215, 75, 1);
+  text-decoration: none;
+  border-radius: 12px;
+  width: 220px;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.home__link:hover {
+  transform: scale(105%);
+  transition: 0.2s;
+}
