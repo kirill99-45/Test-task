@@ -1,9 +1,9 @@
 export interface IPrice {
   total : number,
-  pier : number,
+  pier? : number,
 }
 
-interface IMark {
+export interface IMark {
   title : string,
   background : string,
   color : string,
@@ -39,7 +39,6 @@ export const State: IState[] = [
     times : ['12:00', '12:00', '12:00', '12:00'],
     price : {
       total : 1900,
-      pier : 1200,
     },
   },
   {

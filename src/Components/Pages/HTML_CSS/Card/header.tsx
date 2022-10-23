@@ -1,6 +1,8 @@
+import { IMark } from './../Store'
+
 interface IHeaderProps {
   img : string,
-  mark? : string,
+  mark? : IMark,
 }
 
 export const Header: React.FC<IHeaderProps> = ({ img, mark }) => {

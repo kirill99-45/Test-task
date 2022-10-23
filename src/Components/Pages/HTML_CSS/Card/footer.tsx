@@ -11,7 +11,7 @@ export const Footer: React.FC<IPrice> = ({ total, pier }) => {
           <span className='price__total'>{total}</span>
           <FontAwesomeIcon icon={faRubleSign} className='price__ruble'/>
         </div>
-        <span className='price__pier'>{pier} р на причале</span>
+        { pier && <span className='price__pier'>{pier} р на причале</span> }
       </div>
       <button type='button' className='card__button'>Подробнее</button>
     </footer>
